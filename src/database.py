@@ -1,12 +1,19 @@
 import sqlite3
+import os
 from typing import Optional
 from contextlib import contextmanager
 
 
 class DatabasePool:
-    def __init__(self, database_url: str = ":memory:", pool_size: int = 10):
+    """
+    Database connection pool with configurable size.
+
+    The pool size can be configured via DB_POOL_SIZE environment variable.
+    """
+
+    def __init__(self, database_url: str = ":memory:", pool_size: Optional[int] = None):
         self.database_url = database_url
-        self.pool_size = pool_size
+        self.pool_size = pool_size or int(os.getenv("DB_POOL_SIZE", "10"))
         self.connections = []
         self.available_connections = []
         self._initialize_pool()
