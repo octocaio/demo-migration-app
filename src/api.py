@@ -54,6 +54,21 @@ def delete_user(user_id: int):
     return jsonify({"error": "User not found"}), 404
 
 
+@app.route("/users/<int:user_id>/profile", methods=["GET"])
+def get_user_profile(user_id: int):
+    if user_id not in users_db:
+        return jsonify({"error": "User not found"}), 404
+
+    user = users_db[user_id]
+    profile = {
+        "user_id": user["id"],
+        "username": user["username"],
+        "email": user["email"],
+        "account_status": "active" if user["active"] else "inactive",
+    }
+    return jsonify(profile), 200
+
+
 @app.errorhandler(500)
 def internal_error(error):
     return jsonify({"error": "Internal server error"}), 500
