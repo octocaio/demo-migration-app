@@ -51,3 +51,36 @@ def verify_password(password: str, stored_hash: str, salt: str) -> bool:
 
 def generate_salt() -> str:
     return secrets.token_hex(16)
+
+
+def login(username: str, password: str, token_manager: TokenManager) -> Optional[str]:
+    """
+    Authenticate user and generate session token.
+
+    Args:
+        username: User's username
+        password: User's password
+        token_manager: TokenManager instance for token generation
+
+    Returns:
+        Session token if authentication successful, None otherwise
+    """
+    # TODO: Integrate with actual user database
+    # For now, this is a placeholder implementation
+    user_id = f"user_{username}"
+    token = token_manager.generate_token(user_id)
+    return token
+
+
+def logout(token: str, token_manager: TokenManager) -> bool:
+    """
+    Logout user by revoking their session token.
+
+    Args:
+        token: Session token to revoke
+        token_manager: TokenManager instance for token revocation
+
+    Returns:
+        True if logout successful, False otherwise
+    """
+    return token_manager.revoke_token(token)
